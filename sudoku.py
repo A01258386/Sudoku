@@ -104,6 +104,7 @@ class Grid:
                 if self.cubes[i][j].value == 0:
                     return False
         return True
+
     #résoudre et afficher le résultat
     def solve(self):
         find = find_empty(self.model)
@@ -250,6 +251,14 @@ def redraw_window(win,board, time,strikes):
     #dessiner le sudoku
     board.draw()
 
+#l'heure en format minutes et secondes    
+def format_time(secs):
+    sec = secs%60
+    minute = secs//60
+    hour = minute//60
+
+    mat = " " + str(minute) + ":" + str(sec)
+    return mat
 
 def main():
     win = pygame.display.set_mode((540,600))
@@ -258,8 +267,10 @@ def main():
     key = None
     run =True
     start = time.time()
+    strikes = 0
     while run:
         play_time = round(time.time() - start)
+        #frappes clés
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
@@ -285,6 +296,24 @@ def main():
 
                 if event.key == pygame.K_SPACE:
                     board.solve_gui()
-                   
+                if event.key == pygame.K_RETURN:
+                    i, j = board.selected
+                    if board.cubes[i][j].temp != 0:
+                        if board.place(board.cubes[i][j].temp):
+                            print("Success")
+                        else:
+                            print("Wrong")
+                            strikes += 1
+                        key = None
+
+                        if board.is_finished():
+                            print("Game over")
+                            
+
+        if board.selected and key != None:
+            board.sketch(key)      
+
+        redraw_window(win,board,play_time, board.strikes)
+        pygame.display.update()
 main()
 pygame.quit()
