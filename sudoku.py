@@ -32,6 +32,24 @@ class Grid:
     #mettre à jour le modèle
     def update_model(self):
         self.model = [[self.cubes[i][j].value for j in range(self.cols)] for i in range(self.rows)]
+    
+    def place(self, val):
+        row,col = self.selected
+        #Boîtes vides,définir la valeur et mettre à jour le modèle
+        if self.cubes[row][col].value == 0:
+            self.cubes[row][col].set(val)
+            self.update_model()
+
+            #si la valeur est valide et résout
+            if valid(self.model, val, (row,col)) and self.solve():
+                return True
+            #sinon, remettre à zéro
+            else:
+                self.cubes[row][col].set(0)
+                self.cubes[row][col].set_temp(0)
+                self.update_model()
+                return False
+
 
     def sketch(self, val):
         pass
@@ -67,6 +85,28 @@ class Cube:
             pygame.draw.rect(win, (0, 255, 0), (x, y, gap, gap), 3)
         else:
             pygame.draw.rect(win, (255, 0, 0), (x, y, gap, gap), 3)
+
+def valid(bo, num, pos):
+    # vérifier la ligne
+    for i in range(len(bo[0])):
+        if bo[pos[0]][i] == num and pos[1] != i:
+            return False
+
+    # vérifier la colonne
+    for i in range(len(bo)):
+        if bo[i][pos[1]] == num and pos[0] != i:
+            return False
+
+    # vérifier la boîte
+    box_x = pos[1] // 3
+    box_y = pos[0] // 3
+
+    for i in range(box_y*3, box_y*3 + 3):
+        for j in range(box_x * 3, box_x*3 + 3):
+            if bo[i][j] == num and (i,j) != pos:
+                return False
+    
+    return True
 
 
 def redraw_window(win,board, time,strikes):
