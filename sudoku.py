@@ -270,6 +270,7 @@ def main():
     strikes = 0
     while run:
         play_time = round(time.time() - start)
+
         #frappes clés
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -293,9 +294,14 @@ def main():
                     key = 8
                 if event.key == pygame.K_9:
                     key = 9
+                    
+                if event.key == pygame.K_DELETE:
+                    board.clear()
+                    key = None
 
                 if event.key == pygame.K_SPACE:
                     board.solve_gui()
+
                 if event.key == pygame.K_RETURN:
                     i, j = board.selected
                     if board.cubes[i][j].temp != 0:
@@ -308,7 +314,13 @@ def main():
 
                         if board.is_finished():
                             print("Game over")
-                            
+
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                pos = pygame.mouse.get_pos()
+                clicked = board.click(pos)
+                if clicked:
+                    board.select(clicked[0], clicked[1])
+                    key = None    
 
         if board.selected and key != None:
             board.sketch(key)      
