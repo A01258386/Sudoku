@@ -79,7 +79,12 @@ class Grid:
                 
         self.cubes[row][col].selected = True
         self.selected = (row, col)
-        
+
+    def clear(self):
+        row,col = self.selected
+        if self.cubes[row][col].value == 0:
+            self.cubes[row][col].set_temp(0)
+
     def update_model(self):
         pass
 
