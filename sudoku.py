@@ -85,14 +85,73 @@ class Grid:
         if self.cubes[row][col].value == 0:
             self.cubes[row][col].set_temp(0)
 
-    def update_model(self):
-        pass
+    def click(self, pos):
+        """
+        paramètre : pos
+        retour : (row, col)
+        """
+        if pos[0] < self.width and pos[1] < self.height:
+            gap = self.width / 9
+            x = pos[0] // gap
+            y = pos[1] // gap
+            return (int(y),int(x))
+        else:
+            return None
 
     def is_finished(self):
-        pass
-
+        for i in range(self.rows):
+            for j in range(self.cols):
+                if self.cubes[i][j].value == 0:
+                    return False
+        return True
+    #résoudre et afficher le résultat
     def solve(self):
-        pass
+        find = find_empty(self.model)
+        if not find:
+            return True
+        else:
+            row, col = find
+
+        for i in range(1,10):
+            if valid(self.model, i, (row, col)):
+                self.model[row][col] = i
+
+                if self.solve():
+                    return True
+
+                self.model[row][col] = 0
+                
+        return False
+
+    def solve_gui(self):
+        self.update_model()
+        find = find_empty(self.model)
+        if not find:
+            return True
+        else:
+            row, col = find
+
+        for i in range(1,10):
+            if valid(self.model, i, (row, col)):
+                self.model[row][col] = i
+                self.cubes[row][col].set(i)
+                self.cubes[row][col].draw_change(self.win, True)
+                self.update_model()
+                pygame.display.update()
+                pygame.time.delay(100)
+
+                if self.solve_gui():
+                    return True
+
+                self.model[row][col] = 0
+                self.cubes[row][col].set(0)
+                self.update_model()
+                self.cubes[row][col].draw_change(self.win, False)
+                pygame.display.update()
+                pygame.time.delay(100)
+
+        return False
+
 
 #définir la classe Cube() et les méthodes
 class Cube:
