@@ -29,6 +29,7 @@ class Grid:
         self.update_model()
         self.selected = None
         self.win = win
+
     #mettre à jour le modèle
     def update_model(self):
         self.model = [[self.cubes[i][j].value for j in range(self.cols)] for i in range(self.rows)]
@@ -55,9 +56,20 @@ class Grid:
         self.cubes[row][col].set_temp(val)
 
     def draw(self):
-        # Draw Grid Lines
-        pass
-        # Draw Cubes
+        # Tracer des lignes de quadrillage
+        gap = self.width / 9
+        for i in range(self.rows+1):
+            if i % 3 == 0 and i != 0:
+                thick = 4
+            else:
+                thick = 1
+            pygame.draw.line(self.win, (0,0,0), (0, i*gap), (self.width, i*gap), thick)
+            pygame.draw.line(self.win, (0, 0, 0), (i * gap, 0), (i * gap, self.height), thick)
+
+        # Tracer des cubes
+        for i in range(self.rows):
+            for j in range(self.cols):
+                self.cubes[i][j].draw(self.win)
 
     def update_model(self):
         pass
