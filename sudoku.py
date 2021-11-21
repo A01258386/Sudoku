@@ -122,6 +122,14 @@ class Cube:
     def set_temp(self, val):
         self.temp = val
 
+#trouver des boîtes vides     
+def find_empty(bo):
+    for i in range(len(bo)):
+        for j in range(len(bo[0])):
+            if bo[i][j] == 0:
+                return (i, j)  # retourne la position de la case vide
+    return None
+
 def valid(bo, num, pos):
     # vérifier la ligne
     for i in range(len(bo[0])):
