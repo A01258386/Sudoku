@@ -1,6 +1,9 @@
-#Sudoku and A* solver
+#Jeu de sudoku un A* avec backtracking algoritme
+#Auteur: Gokce Gokmen
+#Date: November/2021
 import pygame
-
+import time
+pygame.font.init()
 
 
 class Grid:
@@ -16,15 +19,24 @@ class Grid:
         [0, 4, 9, 2, 0, 6, 0, 0, 7]
     ]
 
-    def __init__():
-       pass
+    def __init__(self, rows, cols, width, height, win):
+        self.rows = rows
+        self.cols = cols
+        self.cubes = [[Cube(self.board[i][j], i, j, width, height) for j in range(cols)] for i in range(rows)]
+        self.width = width
+        self.height = height
+        self.model = None
+        self.update_model()
+        self.selected = None
+        self.win = win
+
 
     def sketch(self, val):
         pass
 
     def draw(self):
         # Draw Grid Lines
-  
+        pass
         # Draw Cubes
 
     def update_model(self):
@@ -55,7 +67,7 @@ class Cube:
             pygame.draw.rect(win, (255, 0, 0), (x, y, gap, gap), 3)
 
 
-def redraw_window(win):
+def redraw_window(win,board, time,strikes):
 
     # Draw grid and board
     board.draw()
@@ -65,10 +77,12 @@ def main():
     win = pygame.display
     pygame.display.set_caption("Sudoku")
     board = Grid()
+    run =True
     while run:
 
         for event in pygame.event.get():
-            if event.type == 
+            if event.type == pygame.QUIT:
+                run = False
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_1:
                     key = 1
@@ -90,6 +104,7 @@ def main():
                     key = 9
 
                 if event.key == pygame.K_SPACE:
+                    board.solve_gui()
                    
 main()
 pygame.quit()
