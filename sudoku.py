@@ -343,7 +343,9 @@ def main():
         if board.selected and key != None:
             board.sketch(key)      
 
-        redraw_window(win,board,play_time, board.strikes)
+        redraw_window(win,board,play_time, strikes)
         pygame.display.update()
+
+
 main()
 pygame.quit()
