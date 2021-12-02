@@ -3,20 +3,21 @@
 #Date: November/2021
 import pygame
 import time
-pygame.font.init()
+pygame.font.init() #The font module allows for rendering TrueType fonts
 
-
+#définir la grille-sudoku
+#sudoku solver solves only solvable sudokus, therefore I followed hardcoding the game
 class Grid:
     board = [
-        [7, 8, 0, 4, 0, 0, 1, 2, 0],
-        [6, 0, 0, 0, 7, 5, 0, 0, 9],
-        [0, 0, 0, 6, 0, 1, 0, 7, 8],
-        [0, 0, 7, 0, 4, 0, 2, 6, 0],
-        [0, 0, 1, 0, 5, 0, 9, 3, 0],
-        [9, 0, 4, 0, 6, 0, 0, 0, 5],
-        [0, 7, 0, 3, 0, 0, 0, 1, 2],
-        [1, 2, 0, 0, 0, 7, 4, 0, 0],
-        [0, 4, 9, 2, 0, 6, 0, 0, 7]
+        [1, 0, 0, 0, 0, 0, 6, 0, 0],
+        [4, 8, 6, 0, 7, 0, 0, 1, 3],
+        [0, 7, 0, 6, 4, 0, 0, 9, 2],
+        [6, 5, 0, 0, 0, 7, 9, 0, 8],
+        [0, 1, 3, 5, 6, 9, 2, 7, 0],
+        [0, 0, 0, 2, 0, 0, 1, 6, 5],
+        [5, 3, 4, 8, 0, 6, 0, 2, 0],
+        [0, 6, 1, 0, 0, 0, 3, 0, 0],
+        [0, 0, 8, 1, 0, 3, 4, 0, 6]
     ]
 
     def __init__(self, rows, cols, width, height, win):
@@ -105,10 +106,10 @@ class Grid:
                     return False
         return True
 
-    #résoudre et afficher le résultat
+    #Bactracking Algoritme Logic
     def solve(self):
         find = find_empty(self.model)
-        if not find:
+        if not find: #base case of recursion
             return True
         else:
             row, col = find
@@ -120,10 +121,10 @@ class Grid:
                 if self.solve():
                     return True
 
-                self.model[row][col] = 0
+                self.model[row][col] = 0 #backtracking
                 
         return False
-
+#Bactracking Algoritme Exact Implementation
     def solve_gui(self):
         self.update_model()
         find = find_empty(self.model)
@@ -215,7 +216,7 @@ def find_empty(bo):
             if bo[i][j] == 0:
                 return (i, j)  # retourne la position de la case vide
     return None
-
+#find valid cell,means the cell is empty and the row,the col and the block does not have this value
 def valid(bo, num, pos):
     # vérifier la ligne
     for i in range(len(bo[0])):
@@ -261,7 +262,8 @@ def format_time(secs):
     return mat
 
 def main():
-    win = pygame.display.set_mode((540,600))
+    '''Play Game with catching the user input and calling the appropriate function'''
+    win = pygame.display.set_mode((600,640))
     pygame.display.set_caption("Sudoku")
     board = Grid(9,9,540,540,win)
     key = None
